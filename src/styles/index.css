@@ -205,19 +205,19 @@
 }
 
 /* ------------------------------------------------------------------ *
- *  Reduced motion — strip every transform/animation, keep it readable.
+ *  Reduced motion — opt-in via ?reduced-motion, which sets the attribute
+ *  below. Deliberately not tied to the OS media query: see useMotion.js.
  * ------------------------------------------------------------------ */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-  .will-reveal {
-    opacity: 1 !important;
-    transform: none !important;
-  }
+html[data-reduced-motion] *,
+html[data-reduced-motion] *::before,
+html[data-reduced-motion] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+html[data-reduced-motion] .will-reveal {
+  opacity: 1 !important;
+  transform: none !important;
 }

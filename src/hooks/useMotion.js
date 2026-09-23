@@ -5,9 +5,21 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const prefersReducedMotion = () =>
+/**
+ * Motion runs by default, deliberately — the OS "reduce motion" setting is
+ * not honoured automatically, because most Windows machines have animations
+ * switched off system-wide and would otherwise never see the site move.
+ *
+ * The opt-out is still there for anyone who needs it: add ?reduced-motion
+ * to the URL and the whole motion layer switches off.
+ */
+const REDUCED =
   typeof window !== 'undefined' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  new URLSearchParams(window.location.search).has('reduced-motion');
+
+if (REDUCED) document.documentElement.dataset.reducedMotion = '';
+
+export const prefersReducedMotion = () => REDUCED;
 
 /**
  * Lenis inertia scrolling, driven by GSAP's ticker so ScrollTrigger and the
