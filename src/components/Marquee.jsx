@@ -36,8 +36,8 @@ export default function Marquee() {
 
     const tick = () => {
       // Constant drift, plus a nudge proportional to scroll speed.
-      offset -= 0.45 + velocity * 0.06;
-      velocity *= 0.92;
+      offset -= 0.62 + velocity * 0.07;
+      velocity *= 0.9;
 
       const w = half();
       if (w > 0) {

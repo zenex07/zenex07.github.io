@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { education, profile, skillGroups, stats } from '../content/content.js';
-import { gsap, prefersReducedMotion, useReveal } from '../hooks/useMotion.js';
+import { gsap, MOTION, prefersReducedMotion, useReveal } from '../hooks/useMotion.js';
 import SplitHeading from './SplitHeading.jsx';
 
 /** Counts up to a numeric value when scrolled into view; passes text through. */
@@ -16,7 +16,7 @@ function Stat({ value, label }) {
     const ctx = gsap.context(() => {
       gsap.to(obj, {
         v: numeric,
-        duration: 1.4,
+        duration: MOTION.stat,
         ease: 'power2.out',
         scrollTrigger: { trigger: el, start: 'top 88%', once: true },
         onUpdate: () => {

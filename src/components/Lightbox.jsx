@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { gsap, prefersReducedMotion } from '../hooks/useMotion.js';
+import { gsap, MOTION, prefersReducedMotion } from '../hooks/useMotion.js';
 
 /**
  * In-page document viewer for the certificates.
@@ -78,12 +78,12 @@ export default function Lightbox({ items, index, onClose, onNavigate }) {
       gsap.fromTo(
         backdropRef.current,
         { opacity: 0 },
-        { opacity: 1, duration: 0.4, ease: 'power2.out' }
+        { opacity: 1, duration: MOTION.lightbox.backdrop, ease: 'power2.out' }
       );
       gsap.fromTo(
         panelRef.current,
         { opacity: 0, y: 28, scale: 0.985 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'expo.out' }
+        { opacity: 1, y: 0, scale: 1, duration: MOTION.lightbox.panel, ease: 'expo.out' }
       );
     });
     return () => ctx.revert();
@@ -96,7 +96,7 @@ export default function Lightbox({ items, index, onClose, onNavigate }) {
       gsap.fromTo(
         '[data-lb-doc]',
         { opacity: 0 },
-        { opacity: 1, duration: 0.45, ease: 'power2.out' }
+        { opacity: 1, duration: MOTION.lightbox.doc, ease: 'power2.out' }
       );
     });
     return () => ctx.revert();

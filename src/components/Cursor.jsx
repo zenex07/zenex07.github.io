@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { prefersReducedMotion } from '../hooks/useMotion.js';
+import { MOTION, prefersReducedMotion } from '../hooks/useMotion.js';
 
 /**
  * Two-part cursor: a small solid dot that tracks the pointer exactly, and a
@@ -64,9 +64,9 @@ export default function Cursor() {
 
     const tick = () => {
       // Ring eases toward the pointer; the dot snaps to it.
-      ringPos.x += (pos.x - ringPos.x) * 0.16;
-      ringPos.y += (pos.y - ringPos.y) * 0.16;
-      scale += (targetScale - scale) * 0.14;
+      ringPos.x += (pos.x - ringPos.x) * MOTION.pointer.ringLerp;
+      ringPos.y += (pos.y - ringPos.y) * MOTION.pointer.ringLerp;
+      scale += (targetScale - scale) * MOTION.pointer.scaleLerp;
 
       dot.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%)`;
       ring.style.transform = `translate3d(${ringPos.x}px, ${ringPos.y}px, 0) translate(-50%, -50%) scale(${scale})`;
@@ -95,11 +95,11 @@ export default function Cursor() {
       <div
         ref={ringRef}
         data-active="false"
-        className="fixed left-0 top-0 h-9 w-9 rounded-full border border-terracotta/45 bg-terracotta/[0.06] backdrop-blur-[1px] transition-colors duration-300 data-[active=true]:border-terracotta/70 data-[active=true]:bg-terracotta/[0.1]"
+        className="fixed left-0 top-0 h-9 w-9 rounded-full border border-terracotta/45 bg-terracotta/[0.06] backdrop-blur-[1px] transition-colors duration-200 data-[active=true]:border-terracotta/70 data-[active=true]:bg-terracotta/[0.1]"
       >
         <span
           ref={labelRef}
-          className="absolute inset-0 flex items-center justify-center font-mono text-[4.5px] uppercase tracking-[0.16em] text-terracotta opacity-0 transition-opacity duration-200"
+          className="absolute inset-0 flex items-center justify-center font-mono text-[4.5px] uppercase tracking-[0.16em] text-terracotta opacity-0 transition-opacity duration-150"
         />
       </div>
       <div

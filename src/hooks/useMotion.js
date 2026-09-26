@@ -5,6 +5,55 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Mobile browser chrome resizes the viewport mid-scroll; without this every
+// trigger refreshes and the page jumps under the thumb.
+ScrollTrigger.config({ ignoreMobileResize: true });
+
+/* ------------------------------------------------------------------ *
+ *  Motion timing — the one place the whole layer is tuned.
+ *
+ *  The choreography is deliberately unchanged: same order, same
+ *  directions, same easing families. These are only the numbers that
+ *  decide how long each beat takes, pulled short so every piece settles
+ *  quickly instead of making the reader wait on it.
+ * ------------------------------------------------------------------ */
+export const EASE_REVEAL = 'expo.out'; // headings and masked lines
+export const EASE_RISE = 'power3.out'; // fade-and-rise blocks
+
+export const MOTION = {
+  // Scroll
+  lenisDuration: 0.95,
+  // A shorter, more even settle than the default expo curve — arrives just
+  // as fast but without the long creeping tail at the end.
+  lenisEase: (t) => 1 - Math.pow(1 - t, 3.2),
+  anchorDuration: 1.0,
+
+  // Scroll reveals
+  reveal: { duration: 0.7, stagger: 0.055, y: 24 },
+  mask: { duration: 0.8, stagger: 0.065 },
+  heading: { duration: 0.75, stagger: 0.04 },
+
+  // Scroll-driven scrubs (lower = less trailing behind the scroll)
+  scrub: { pin: 0.28, spine: 0.35 },
+
+  // Pointer feel
+  pointer: { ringLerp: 0.22, scaleLerp: 0.19, magnetLerp: 0.24 },
+
+  // Sections
+  hero: {
+    line: 0.85,
+    lineStagger: 0.065,
+    fade: 0.65,
+    fadeStagger: 0.065,
+    portrait: 1.0,
+    rule: 0.8,
+  },
+  preloader: { word: 0.7, wordStagger: 0.055, bar: 0.85, fade: 0.3, lift: 0.7 },
+  lightbox: { backdrop: 0.26, panel: 0.48, doc: 0.3 },
+  stat: 1.0,
+  node: 0.2,
+};
+
 /**
  * Motion runs by default, deliberately — the OS "reduce motion" setting is
  * not honoured automatically, because most Windows machines have animations
@@ -33,10 +82,12 @@ export function useSmoothScroll() {
     if (prefersReducedMotion()) return undefined;
 
     const lenis = new Lenis({
-      duration: 1.15,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: MOTION.lenisDuration,
+      easing: MOTION.lenisEase,
       smoothWheel: true,
-      wheelMultiplier: 0.9,
+      // Undamped distance per notch — the inertia curve already smooths the
+      // motion, so holding it back on top just made the wheel feel laggy.
+      wheelMultiplier: 1,
       touchMultiplier: 1.6,
     });
     lenisRef.current = lenis;
@@ -64,7 +115,7 @@ export function scrollToSection(hash) {
   const el = document.querySelector(hash);
   if (!el) return;
   if (window.__lenis) {
-    window.__lenis.scrollTo(el, { offset: -8, duration: 1.3 });
+    window.__lenis.scrollTo(el, { offset: -8, duration: MOTION.anchorDuration });
   } else {
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -79,7 +130,12 @@ export function scrollToSection(hash) {
  */
 export function useReveal(options = {}) {
   const scope = useRef(null);
-  const { stagger = 0.08, y = 28, duration = 1.0, start = 'top 85%' } = options;
+  const {
+    stagger = MOTION.reveal.stagger,
+    y = MOTION.reveal.y,
+    duration = MOTION.reveal.duration,
+    start = 'top 85%',
+  } = options;
 
   useLayoutEffect(() => {
     const root = scope.current;
@@ -111,7 +167,7 @@ export function useReveal(options = {}) {
               y: 0,
               duration,
               stagger,
-              ease: 'power3.out',
+              ease: EASE_RISE,
               onStart: () => batch.forEach((el) => el.classList.remove('will-reveal')),
             }),
         });
@@ -129,9 +185,9 @@ export function useReveal(options = {}) {
             el.classList.remove('will-reveal');
             gsap.to(lines, {
               yPercent: 0,
-              duration: 1.15,
-              stagger: 0.1,
-              ease: 'expo.out',
+              duration: MOTION.mask.duration,
+              stagger: MOTION.mask.stagger,
+              ease: EASE_REVEAL,
             });
           },
         });

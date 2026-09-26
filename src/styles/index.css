@@ -173,7 +173,7 @@
     background: currentColor;
     transform: scaleX(0);
     transform-origin: right;
-    transition: transform 0.5s var(--ease-out-soft);
+    transition: transform 0.34s var(--ease-out-soft);
   }
   .link-wipe:hover::after {
     transform: scaleX(1);

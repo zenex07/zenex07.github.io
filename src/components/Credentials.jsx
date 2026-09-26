@@ -14,7 +14,7 @@ function Card({ cert, onOpen }) {
       data-cursor="view"
       data-reveal="up"
       aria-label={`View ${cert.title} certificate`}
-      className="card-paper group flex flex-col overflow-hidden rounded-2xl text-left transition-all duration-500 ease-[var(--ease-out-soft)] hover:-translate-y-1.5 hover:shadow-[0_28px_70px_-28px_rgba(36,28,22,0.45)]"
+      className="card-paper group flex flex-col overflow-hidden rounded-2xl text-left transition-all duration-400 ease-[var(--ease-out-soft)] hover:-translate-y-1.5 hover:shadow-[0_28px_70px_-28px_rgba(36,28,22,0.45)]"
     >
       {/* Thumbnail, or a typographic stand-in when the PDF is vector-only. */}
       <div className="relative aspect-[1.4/1] overflow-hidden border-b border-line/60 bg-sand/40">
@@ -25,10 +25,10 @@ function Card({ cert, onOpen }) {
             loading="lazy"
             /* Warmed down at rest so the grid reads as one palette; the
                certificate returns to its true colours on hover. */
-            className="h-full w-full object-cover object-top transition-[transform,filter] duration-700 ease-[var(--ease-out-soft)] [filter:sepia(0.42)_saturate(0.68)_contrast(1.02)_brightness(1.02)] group-hover:scale-[1.04] group-hover:[filter:none]"
+            className="h-full w-full object-cover object-top transition-[transform,filter] duration-500 ease-[var(--ease-out-soft)] [filter:sepia(0.42)_saturate(0.68)_contrast(1.02)_brightness(1.02)] group-hover:scale-[1.04] group-hover:[filter:none]"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-bone to-sand/70 transition-transform duration-700 ease-[var(--ease-out-soft)] group-hover:scale-[1.03]">
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-bone to-sand/70 transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:scale-[1.03]">
             <span className="display px-6 text-center text-xl leading-tight text-clay/70">
               {cert.title}
             </span>
@@ -38,7 +38,7 @@ function Card({ cert, onOpen }) {
         {/* Wipe that sweeps across on hover. */}
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-bone/35 to-transparent transition-transform duration-[900ms] ease-[var(--ease-out-soft)] group-hover:translate-x-full"
+          className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-bone/35 to-transparent transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:translate-x-full"
         />
 
         {cert.badge ? (
@@ -67,7 +67,7 @@ function Card({ cert, onOpen }) {
 
         <span className="mt-auto flex items-center gap-2 pt-5 font-mono text-[10px] uppercase tracking-[0.16em] text-ink-mute transition-colors duration-300 group-hover:text-terracotta">
           View certificate
-          <span className="transition-transform duration-400 group-hover:translate-x-1">→</span>
+          <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
         </span>
       </div>
     </button>

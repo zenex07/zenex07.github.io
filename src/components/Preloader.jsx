@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { gsap, prefersReducedMotion } from '../hooks/useMotion.js';
+import { gsap, MOTION, prefersReducedMotion } from '../hooks/useMotion.js';
 import { profile } from '../content/content.js';
 
 /**
@@ -34,22 +34,34 @@ export default function Preloader({ onDone }) {
         },
       });
 
-      tl.from('[data-pre-word]', { yPercent: 115, duration: 1.0, stagger: 0.08 })
-        .to(barRef.current, { scaleX: 1, duration: 1.25, ease: 'power2.inOut' }, 0.1)
+      tl.from('[data-pre-word]', {
+        yPercent: 115,
+        duration: MOTION.preloader.word,
+        stagger: MOTION.preloader.wordStagger,
+      })
+        .to(
+          barRef.current,
+          { scaleX: 1, duration: MOTION.preloader.bar, ease: 'power2.inOut' },
+          0.1
+        )
         .to(
           counter,
           {
             value: 100,
-            duration: 1.25,
+            duration: MOTION.preloader.bar,
             ease: 'power2.inOut',
             onUpdate: () => setCount(Math.round(counter.value)),
           },
           0.1
         )
-        .to('[data-pre-fade]', { opacity: 0, duration: 0.4, ease: 'power2.in' }, '+=0.12')
+        .to(
+          '[data-pre-fade]',
+          { opacity: 0, duration: MOTION.preloader.fade, ease: 'power2.in' },
+          '+=0.12'
+        )
         .to(root.current, {
           yPercent: -100,
-          duration: 1.0,
+          duration: MOTION.preloader.lift,
           ease: 'expo.inOut',
         });
     }, root);

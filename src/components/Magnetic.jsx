@@ -1,5 +1,5 @@
 import { cloneElement, useEffect, useRef } from 'react';
-import { prefersReducedMotion } from '../hooks/useMotion.js';
+import { MOTION, prefersReducedMotion } from '../hooks/useMotion.js';
 
 /**
  * Pulls its child toward the pointer while the pointer is nearby, then
@@ -44,8 +44,8 @@ export default function Magnetic({ children, strength = 0.32, padding = 24 }) {
     };
 
     const tick = () => {
-      pos.x += (target.x - pos.x) * 0.18;
-      pos.y += (target.y - pos.y) * 0.18;
+      pos.x += (target.x - pos.x) * MOTION.pointer.magnetLerp;
+      pos.y += (target.y - pos.y) * MOTION.pointer.magnetLerp;
       el.style.transform = `translate3d(${pos.x.toFixed(2)}px, ${pos.y.toFixed(2)}px, 0)`;
 
       const settled =

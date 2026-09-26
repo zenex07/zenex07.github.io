@@ -1,6 +1,12 @@
 import { useLayoutEffect, useRef } from 'react';
 import { journey } from '../content/content.js';
-import { gsap, ScrollTrigger, prefersReducedMotion, useReveal } from '../hooks/useMotion.js';
+import {
+  gsap,
+  MOTION,
+  ScrollTrigger,
+  prefersReducedMotion,
+  useReveal,
+} from '../hooks/useMotion.js';
 import SplitHeading from './SplitHeading.jsx';
 
 /**
@@ -9,7 +15,7 @@ import SplitHeading from './SplitHeading.jsx';
  * and the progress of the reading are the same thing.
  */
 export default function Journey() {
-  const scope = useReveal({ stagger: 0.07 });
+  const scope = useReveal({ stagger: 0.05 });
   const spineRef = useRef(null);
   const listRef = useRef(null);
 
@@ -29,7 +35,7 @@ export default function Journey() {
             trigger: list,
             start: 'top 72%',
             end: 'bottom 78%',
-            scrub: 0.5,
+            scrub: MOTION.scrub.spine,
           },
         }
       );
@@ -42,7 +48,7 @@ export default function Journey() {
           {
             backgroundColor: '#b4552f',
             scale: 1.35,
-            duration: 0.3,
+            duration: MOTION.node,
             ease: 'power2.out',
             scrollTrigger: { trigger: node, start: 'top 72%', once: true },
           }

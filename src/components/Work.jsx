@@ -27,7 +27,7 @@ function ProjectPanel({ accent, index, title }) {
   const palette = PANELS[accent] || PANELS.terracotta;
   return (
     <div
-      className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-line/60 transition-transform duration-700 ease-[var(--ease-out-soft)] group-hover:scale-[1.015]"
+      className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-line/60 transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:scale-[1.015]"
       style={{ background: palette.base }}
       aria-hidden="true"
     >
@@ -101,7 +101,7 @@ function Project({ project, flip }) {
 
         {/* Detail drawer — keeps the page scannable but the depth available. */}
         <div
-          className="grid transition-[grid-template-rows,opacity] duration-600 ease-[var(--ease-out-soft)]"
+          className="grid transition-[grid-template-rows,opacity] duration-400 ease-[var(--ease-out-soft)]"
           style={{
             gridTemplateRows: open ? '1fr' : '0fr',
             opacity: open ? 1 : 0,

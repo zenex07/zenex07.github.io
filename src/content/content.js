@@ -14,7 +14,7 @@ export const profile = {
   phone: 'TODO: phone number',
   github: 'https://github.com/zenex07',
   githubHandle: 'zenex07',
-  linkedin: 'TODO: LinkedIn URL',
+  linkedin: 'https://in.linkedin.com/in/rohit-pise-8906b3370',
   resumeUrl: './assets/rohit-pise-resume.pdf',
 
   // Hero — three lines, revealed one after another.

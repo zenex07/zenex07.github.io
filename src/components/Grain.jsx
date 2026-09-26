@@ -35,7 +35,7 @@ export default function Grain() {
           mix-blend-mode: multiply;
           background-image: url("${NOISE}");
           background-repeat: repeat;
-          animation: grain-shift 6s steps(10) infinite;
+          animation: grain-shift 4.5s steps(10) infinite;
           will-change: transform;
         }
         /* A still grain still reads as paper; only the flicker is removed. */

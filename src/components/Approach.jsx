@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { approach } from '../content/content.js';
-import { gsap, ScrollTrigger, prefersReducedMotion } from '../hooks/useMotion.js';
+import { gsap, MOTION, ScrollTrigger, prefersReducedMotion } from '../hooks/useMotion.js';
 import SplitHeading from './SplitHeading.jsx';
 
 /**
@@ -29,7 +29,7 @@ export default function Approach() {
         start: 'top top',
         end: () => `+=${panels.length * 340}`,
         pin: true,
-        scrub: 0.4,
+        scrub: MOTION.scrub.pin,
         onUpdate: (self) => {
           // Map 0..1 progress onto a step index, clamped off the end.
           const i = Math.min(
@@ -73,7 +73,7 @@ export default function Approach() {
                 {approach.map((s, i) => (
                   <span
                     key={s.step}
-                    className={`h-px transition-all duration-500 ${
+                    className={`h-px transition-all duration-300 ${
                       i === active ? 'w-12 bg-ember' : 'w-6 bg-ivory/25'
                     }`}
                   />
@@ -88,7 +88,7 @@ export default function Approach() {
               <div
                 key={s.step}
                 data-step-panel
-                className={`border-t border-ivory/12 py-7 transition-opacity duration-500 lg:py-8 ${
+                className={`border-t border-ivory/12 py-7 transition-opacity duration-300 lg:py-8 ${
                   i === active ? 'lg:opacity-100' : 'lg:opacity-30'
                 }`}
               >

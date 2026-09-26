@@ -1,5 +1,11 @@
 import { useLayoutEffect, useRef } from 'react';
-import { gsap, ScrollTrigger, prefersReducedMotion } from '../hooks/useMotion.js';
+import {
+  EASE_REVEAL,
+  gsap,
+  MOTION,
+  ScrollTrigger,
+  prefersReducedMotion,
+} from '../hooks/useMotion.js';
 
 /**
  * A heading whose words rise out of clipped lines when it scrolls into view.
@@ -43,10 +49,10 @@ export default function SplitHeading({
           gsap.to(words, {
             yPercent: 0,
             opacity: 1,
-            duration: 1.1,
+            duration: MOTION.heading.duration,
             delay,
-            stagger: 0.055,
-            ease: 'expo.out',
+            stagger: MOTION.heading.stagger,
+            ease: EASE_REVEAL,
           }),
       });
     }, el);

@@ -61,7 +61,7 @@ export default function Nav() {
       />
 
       <header
-        className={`fixed inset-x-0 top-0 z-[60] transition-all duration-500 ${
+        className={`fixed inset-x-0 top-0 z-[60] transition-all duration-400 ${
           lifted
             ? 'border-b border-line/60 bg-ivory/80 backdrop-blur-md'
             : 'border-b border-transparent'
@@ -118,12 +118,12 @@ export default function Nav() {
               className="flex h-9 w-9 flex-col items-center justify-center gap-[5px] md:hidden"
             >
               <span
-                className={`h-px w-5 bg-ink transition-transform duration-300 ${
+                className={`h-px w-5 bg-ink transition-transform duration-250 ${
                   open ? 'translate-y-[3px] rotate-45' : ''
                 }`}
               />
               <span
-                className={`h-px w-5 bg-ink transition-transform duration-300 ${
+                className={`h-px w-5 bg-ink transition-transform duration-250 ${
                   open ? '-translate-y-[3px] -rotate-45' : ''
                 }`}
               />
@@ -134,7 +134,7 @@ export default function Nav() {
 
       {/* Mobile sheet */}
       <div
-        className={`fixed inset-0 z-[59] bg-ivory transition-[opacity,visibility] duration-400 md:hidden ${
+        className={`fixed inset-0 z-[59] bg-ivory transition-[opacity,visibility] duration-300 md:hidden ${
           open ? 'visible opacity-100' : 'invisible opacity-0'
         }`}
       >
@@ -144,10 +144,10 @@ export default function Nav() {
               <a
                 href={link.href}
                 onClick={(e) => go(e, link.href)}
-                className="display block py-2 text-5xl transition-transform duration-500"
+                className="display block py-2 text-5xl transition-transform duration-400"
                 style={{
                   transform: open ? 'translateY(0)' : 'translateY(110%)',
-                  transitionDelay: `${open ? 80 + i * 55 : 0}ms`,
+                  transitionDelay: `${open ? 60 + i * 40 : 0}ms`,
                 }}
               >
                 {link.label}

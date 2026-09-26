@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { profile } from '../content/content.js';
-import { gsap, prefersReducedMotion, scrollToSection, useParallax } from '../hooks/useMotion.js';
+import {
+  gsap,
+  MOTION,
+  prefersReducedMotion,
+  scrollToSection,
+  useParallax,
+} from '../hooks/useMotion.js';
 import ShaderBackdrop from './ShaderBackdrop.jsx';
 import Magnetic from './Magnetic.jsx';
 
@@ -30,16 +36,24 @@ export default function Hero({ ready }) {
 
       tl.from('[data-hero-line] > span', {
         yPercent: 112,
-        duration: 1.25,
-        stagger: 0.09,
+        duration: MOTION.hero.line,
+        stagger: MOTION.hero.lineStagger,
       })
-        .from('[data-hero-fade]', { y: 22, opacity: 0, duration: 1.0, stagger: 0.1 }, '-=0.75')
+        .from(
+          '[data-hero-fade]',
+          { y: 22, opacity: 0, duration: MOTION.hero.fade, stagger: MOTION.hero.fadeStagger },
+          '-=0.55'
+        )
         .from(
           '[data-hero-portrait]',
-          { scale: 1.06, opacity: 0, duration: 1.6, ease: 'power3.out' },
-          '-=1.2'
+          { scale: 1.06, opacity: 0, duration: MOTION.hero.portrait, ease: 'power3.out' },
+          '-=0.75'
         )
-        .from('[data-hero-rule]', { scaleX: 0, duration: 1.2, ease: 'power2.inOut' }, '-=1.1');
+        .from(
+          '[data-hero-rule]',
+          { scaleX: 0, duration: MOTION.hero.rule, ease: 'power2.inOut' },
+          '-=0.7'
+        );
     }, root);
 
     return () => ctx.revert();
@@ -77,7 +91,7 @@ export default function Hero({ ready }) {
         <ShaderBackdrop />
         <video
           ref={videoRef}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
             hasVideo ? 'opacity-100' : 'opacity-0'
           }`}
           style={{
@@ -133,10 +147,10 @@ export default function Hero({ ready }) {
                     scrollToSection('#work');
                   }}
                   data-cursor="view"
-                  className="group inline-flex items-center gap-3 rounded-full bg-ink px-7 py-3.5 text-sm text-bone transition-colors duration-400 hover:bg-terracotta"
+                  className="group inline-flex items-center gap-3 rounded-full bg-ink px-7 py-3.5 text-sm text-bone transition-colors duration-300 hover:bg-terracotta"
                 >
                   See the work
-                  <span className="transition-transform duration-400 group-hover:translate-x-1">
+                  <span className="transition-transform duration-300 group-hover:translate-x-1">
                     →
                   </span>
                 </a>
@@ -201,7 +215,7 @@ export default function Hero({ ready }) {
           Scroll
         </span>
         <span className="relative block h-10 w-px overflow-hidden bg-line">
-          <span className="absolute inset-x-0 top-0 h-1/2 animate-[scrollcue_2.2s_ease-in-out_infinite] bg-terracotta" />
+          <span className="absolute inset-x-0 top-0 h-1/2 animate-[scrollcue_1.8s_ease-in-out_infinite] bg-terracotta" />
         </span>
         <style>{`
           @keyframes scrollcue {
