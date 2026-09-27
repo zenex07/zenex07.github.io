@@ -41,5 +41,22 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # A repository whose Pages source is still "Deploy from a branch" ignores
+      # the artifact uploaded above and publishes the raw branch instead - which
+      # for a Vite app means shipping index.html that points at /src/main.jsx, so
+      # the browser receives uncompiled JSX and renders a blank page. Switching
+      # the build type to the Actions workflow is what makes the artifact live.
+      # Requires the `pages: write` permission granted above.
+      - name: Point Pages at the Actions artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh api -X PUT "repos/${{ github.repository }}/pages" -f build_type=workflow >/dev/null 2>&1; then
+            echo "Pages build type is now 'workflow'."
+          else
+            echo "::warning::Could not set build_type=workflow (Pages API refused)."
+            echo "Set it manually: Settings -> Pages -> Source -> GitHub Actions."
+          fi
+
       - id: deployment
         uses: actions/deploy-pages@v4
