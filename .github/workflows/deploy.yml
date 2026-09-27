@@ -33,23 +33,28 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      # A repository whose Pages source is still "Deploy from a branch" ignores
-      # the artifact uploaded above and publishes the raw branch instead. For a
-      # Vite app that means serving index.html which points at /src/main.jsx, so
-      # the browser receives uncompiled JSX and renders a blank page. This step
-      # switches the build type to the Actions workflow so the artifact goes
-      # live. It needs a token with Pages write access; if the token lacks it,
-      # set it once by hand: Settings -> Pages -> Source -> GitHub Actions.
+      # GitHub Pages ignores the artifact uploaded above unless the repository's
+      # Pages source is set to "GitHub Actions". If it is still "Deploy from a
+      # branch", Pages publishes the raw branch instead: index.html points at
+      # /src/main.jsx, the browser receives uncompiled JSX, and the site renders
+      # blank. This checks the setting and only attempts a fix when it is wrong.
       - name: Ensure Pages publishes the Actions artifact
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          body='{"build_type":"workflow"}'
-          if printf '%s' "$body" | gh api -X PUT "repos/${{ github.repository }}/pages" --input - >/dev/null 2>&1; then
-            echo "Pages build type: workflow (artifact will be published)."
+          repo="${{ github.repository }}"
+          current=$(gh api "repos/$repo/pages" --jq '.build_type' 2>/dev/null || echo "unknown")
+          if [ "$current" = "workflow" ]; then
+            echo "Pages source is GitHub Actions - the artifact will be published."
+            exit 0
+          fi
+          echo "Pages source is '$current', not 'workflow'. Trying to correct it..."
+          if printf '%s' '{"build_type":"workflow"}' \
+               | gh api -X PUT "repos/$repo/pages" --input - >/dev/null 2>&1; then
+            echo "Corrected. Pages will now publish the Actions artifact."
           else
-            echo "Could not set the Pages build type automatically."
-            echo "Set it once by hand: Settings -> Pages -> Source -> GitHub Actions."
+            echo "::warning::Pages source is '$current' and could not be changed automatically."
+            echo "::warning::Set it once by hand: Settings -> Pages -> Source -> GitHub Actions."
           fi
 
       - id: deployment
