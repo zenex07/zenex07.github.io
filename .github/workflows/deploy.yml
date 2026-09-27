@@ -1,39 +1,31 @@
 name: Deploy to GitHub Pages
-
 on:
   push:
     branches: [main]
   workflow_dispatch:
-
 permissions:
   contents: read
   pages: write
   id-token: write
-
 # Let a running deploy finish rather than cancelling it mid-publish.
 concurrency:
   group: pages
   cancel-in-progress: false
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
-
       - run: npm ci
       - run: npm run build
-
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -42,20 +34,22 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       # A repository whose Pages source is still "Deploy from a branch" ignores
-      # the artifact uploaded above and publishes the raw branch instead - which
-      # for a Vite app means shipping index.html that points at /src/main.jsx, so
-      # the browser receives uncompiled JSX and renders a blank page. Switching
-      # the build type to the Actions workflow is what makes the artifact live.
-      # Requires the `pages: write` permission granted above.
-      - name: Point Pages at the Actions artifact
+      # the artifact uploaded above and publishes the raw branch instead. For a
+      # Vite app that means serving index.html which points at /src/main.jsx, so
+      # the browser receives uncompiled JSX and renders a blank page. This step
+      # switches the build type to the Actions workflow so the artifact goes
+      # live. It needs a token with Pages write access; if the token lacks it,
+      # set it once by hand: Settings -> Pages -> Source -> GitHub Actions.
+      - name: Ensure Pages publishes the Actions artifact
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           body='{"build_type":"workflow"}'
-          if out=$(printf '%s' "$body" | gh api -X PUT "repos/${{ github.repository }}/pages" --input - 2>&1); then
-            echo "Pages build type is now 'workflow'."
+          if printf '%s' "$body" | gh api -X PUT "repos/${{ github.repository }}/pages" --input - >/dev/null 2>&1; then
+            echo "Pages build type: workflow (artifact will be published)."
           else
-            echo "::warning::Could not set build_type=workflow: $out"
+            echo "Could not set the Pages build type automatically."
+            echo "Set it once by hand: Settings -> Pages -> Source -> GitHub Actions."
           fi
 
       - id: deployment
